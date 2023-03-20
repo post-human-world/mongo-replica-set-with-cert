@@ -1,0 +1,70 @@
+version: '3.8'
+name: replica-set
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo:6.0.5
+    volumes:
+      - ./mongodb/keys/ssl1/:/keys
+      - ./mongodb/config/:/config
+      - ./mongodb/data/rs1/:/data
+    networks:
+      - mongors-network
+    ports:
+      - 27021:27017
+    links:
+      - mongo2
+      - mongo3
+    restart: always
+    # enable file permission
+    entrypoint: [ "bash", "/config/entrypoint.sh" ]
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
+
+  mongo2:
+    container_name: mongo2
+    image: mongo:6.0.5
+    volumes:
+      - ./mongodb/keys/ssl2/:/keys
+      - ./mongodb/config/:/config
+      - ./mongodb/data/rs2/:/data
+    networks:
+      - mongors-network
+    ports:
+      - 27022:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--config", "/config/mongod.cfg" ]
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
+
+  mongo3:
+    container_name: mongo3
+    image: mongo:6.0.5
+    volumes:
+      - ./mongodb/keys/ssl3/:/keys
+      - ./mongodb/config/:/config
+      - ./mongodb/data/rs3/:/data
+    networks:
+      - mongors-network
+    ports:
+      - 27023:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--config", "/config/mongod.cfg" ]
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 3s
+        max_attempts: 5
+        window: 60s
+
+networks:
+  mongors-network:
+    driver: bridge

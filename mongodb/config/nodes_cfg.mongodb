@@ -1,0 +1,51 @@
+use('admin')
+
+var config = {
+    "_id": "rs0",
+    "version": 1,
+    "members": [
+        {
+            "_id": 1,
+            "host": "mongo1:27017",
+            "priority": 7
+        },
+        {
+            "_id": 2,
+            "host": "mongo2:27017",
+            "priority": 2
+        },
+        {
+            "_id": 3,
+            "host": "mongo3:27017",
+            "priority": 1
+        }
+    ]
+}
+
+try {
+    rs.initiate(config, { force: true })
+    print('initiate successfully')
+} catch(e) {
+    print('already initiated')
+}
+
+for (let i = 0; i < 7; i++) {
+    try {
+        db.createUser({
+            user: 'tom-rs',
+            pwd: 'jerry',
+            roles: ["root"]
+        })
+        print('Create user successfully')
+        break
+    } catch (e) {
+        if (e.codeName == 'NotWritablePrimary') {
+            print('Create user failed, because this node does not become primary. Retrying.......')
+            sleep(3 * 1000)
+            continue
+        }
+        print(JSON.stringify(e))
+        print('Create user failed, do it manually')
+        break
+    }
+}
