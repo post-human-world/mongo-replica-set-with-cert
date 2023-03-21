@@ -26,7 +26,7 @@ try {
     rs.initiate(config, { force: true })
     print('initiate successfully')
 } catch(e) {
-    print('already initiated')
+    print('initiated failed: ' + JSON.stringify(e))
 }
 
 for (let i = 0; i < 7; i++) {
