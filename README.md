@@ -29,6 +29,10 @@ docker compose up -d --build
 
 3. Access mongodb with url: `mongodb://tom-rs:jerry@localhost:27021/?directConnection=true&authMechanism=DEFAULT`
 
+You can access secondary to check data if exists, but if you want to read from secondary you have to change `readPreference` when you connect to secondary. 
+
+You will not see new database on UI if you does not set `readPreference` and connect to secondary with mongo compass. But you can see them using command `show dbs`
+
 # Reference
 
 - [Deploy a 3-Node MongoDB 4.0 Replica Set with X.509 Authentication + Self Signed Certificates](https://rossbulat.medium.com/deploy-a-3-node-mongodb-3-6-replica-set-with-x-509-authentication-self-signed-certificates-d539fda94db4)

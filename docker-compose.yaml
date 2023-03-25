@@ -1,5 +1,5 @@
 version: '3.8'
-name: replica-set
+name: replica-set-with-cert
 services:
   mongo1:
     container_name: mongo1

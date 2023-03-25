@@ -1,2 +1,2 @@
 #!/bin/bash
-mongosh -f /config/nodes_cfg.mongodb
+mongosh "mongodb://localhost:27017/?directConnection=true&authMechanism=DEFAULT&tls=true&tlsAllowInvalidCertificates=true&tlsCertificateKeyFile=/keys/mongo.pem&tlsCAFile=/keys/mongoCA.crt" -f /config/nodes_cfg.mongodb 
